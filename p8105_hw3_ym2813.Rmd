@@ -1,0 +1,16 @@
+---
+title: "p8105_hw3_ym2813"
+author: "Anna Ma"
+date: "10/15/2021"
+output: github_document
+---
+
+## Problem 1
+
+Load the data set 
+
+```{r}
+library(p8105.datasets)
+data("instacart")
+```
+
