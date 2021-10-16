@@ -7,13 +7,9 @@ output: github_document
 
 ```{r}
 library(tidyverse)
-knitr::opts_chunk$set(
-  fig.width = 6,
-  fig.asp = .6,
-  out.width = "90%"
-)
 
-theme_set(theme_minimal() + theme(legend.position = "bottom"))
+
+theme_set(theme_minimal())
 
 options(
   ggplot2.continuous.colour = "viridis",
@@ -184,6 +180,9 @@ brfss_df %>%
 
 In 2002, there are 6 states that were observed at 7 or more locations. The names of the states are CT,FL,MA, NC, NJ, and PA. In 2010, there are 14 states that were observed at 7 or more locations. The names of those states are CA, CO, FL, MA, MD, NC, NE, NJ, NY, OH, PA, SC, TX, WA. 
 
+
+Construct a dataset that is limited to Excellent responses, and contains, year, state, and a variable that averages the data_value across locations within a state. 
+
 ```{r}
 mean_excellent_df = brfss_df %>% 
   filter(response == "Excellent") %>% 
@@ -195,7 +194,8 @@ mean_excellent_df = brfss_df %>%
   distinct()
 ```
 
-Construct a dataset that is limited to Excellent responses, and contains, year, state, and a variable that averages the data_value across locations within a state. 
+
+Make a “spaghetti” plot of this average value over time within a state (that is, make a plot showing a line for each state across years – the geom_line geometry and group aesthetic will help).
 
 ```{r}
 mean_excellent_df %>% 
@@ -204,8 +204,13 @@ mean_excellent_df %>%
 ```
 
 
-Make a “spaghetti” plot of this average value over time within a state (that is, make a plot showing a line for each state across years – the geom_line geometry and group aesthetic will help).
-
-
 Make a two-panel plot showing, for the years 2006, and 2010, distribution of data_value for responses (“Poor” to “Excellent”) among locations in NY State.
+```{r}
+brfss_df %>% 
+  filter(state == "NY", year == 2006 | year == 2010) %>% 
+  ggplot(aes(x = data_value, fill = response)) +
+  geom_density(alpha = .5) + 
+  facet_grid(. ~ year) +
+  theme(legend.position = "bottom")
+```
 
