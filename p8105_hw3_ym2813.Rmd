@@ -5,7 +5,7 @@ date: "10/15/2021"
 output: github_document
 ---
 
-```{r}
+```{r, message=FALSE}
 library(tidyverse)
 
 
@@ -31,8 +31,6 @@ library(p8105.datasets)
 data("instacart")
 ```
 
-The goal is to do some exploration of this dataset. To that end, write a short description of the dataset, noting the size and structure of the data, describing some key variables, and giving illstrative examples of observations. 
-
 
 ```{r, eval = FALSE}
 # Find the number of users. 
@@ -41,18 +39,10 @@ instacart %>%
   n_distinct()
 ```
 
-```{r}
-instacart %>% filter(order_id == 1)
-```
+**Description:**
+  This data set has `r nrow(instacart)` rows of `r instacart %>% select(user_id) %>% n_distinct()` users, and `r ncol(instacart)` columns. The rows represents the products from the orders, and the variables includes information about the order, user,and the product. Some of the key variables includes order_id, product_id, user_id, order_number, order_dow, product_name, aisle, and department. For example, the first observation from the data set gives the information that this product, identified by product_id 49302, is in order number 1, which was placed by the user with user id 112108. This is the first product that the user added to the cart and it's been ordered before, since the variable "reordered" is 1. This is the 4th order of the user from instacart and it was placed on the 4th day of the week at 10 o'clock. The last order by the same user was 9 days ago. More specifically about this product, it is the Bulgarian yogurt from the yogurt aisle, with aisle id 120 and the dairy eggs department, with department id 16. 
 
-This data set has `r nrow(instacart)` rows of `r instacart %>% select(user_id) %>% n_distinct()` users, and `r ncol(instacart)` columns. The rows represents the products from the orders, and the variables includes information about the order, user,and the product. Some of the key variables includes order_id, product_id, user_id, order_number, order_dow, product_name, aisle, and department. For example, the first observation from the data set gives the information that this product, identified by product_id 49302, is in order number 1, which was placed by the user with user id 112108. This is the first product that the user added to the cart and it's been ordered before, since the variable "reordered" is 1. This is the 4th order of the user from instacart and it was placed on the 4th day of the week at 10 o'clock. The last order by the same user was 9 days ago. More specifically about this product, it is the Bulgarian yogurt from the yogurt aisle, with aisle id 120 and the dairy eggs department, with department id 16. 
-
-
-
-
-Then, do or answer the following (commenting on the results of each):
-
-How many aisles are there, and which aisles are the most items ordered from?
+**How many aisles are there, and which aisles are the most items ordered from?**
 
 ```{r}
 # The number of aisles
@@ -74,7 +64,7 @@ aisle_most
 There are `r aisles_n` aisles in total, the `r aisle_most` aisle is the most ordered from. 
 
 
-Plot that shows the number of items ordered in each aisle, limiting this to aisles with more than 10000 items ordered. 
+**Plot the number of items ordered in each aislewith more than 10000 items ordered.**
 
 ```{r}
 instacart %>% 
@@ -93,9 +83,9 @@ instacart %>%
     caption = "Data from instacart")
 ```
 
-I organized the aisles from the least of items ordered to the most ordered so that the plot is more readable 
+Organized the aisles from the least of items ordered to the most ordered so that the plot is more readable 
 
-Make a table showing the three most popular items in each of the aisles “baking ingredients”, “dog food care”, and “packaged vegetables fruits”. Include the number of times each item is ordered in your table.
+**Table for the three most popular items in each of the aisles “baking ingredients”, “dog food care”, and “packaged vegetables fruits”.**
 
 ```{r}
 instacart %>% 
@@ -109,6 +99,8 @@ instacart %>%
 ```
 
 From this table, we can see that the top three most popular item in the baking ingredients aisle is light brown sugar, ordered 499 times, pure baking soda, ordered 387 time, and cane sugar, ordered 336 times. Similarly, in the dog food care aisle, the top three most popular product is snack sticks chicken and rice recipe dog treats, ordered 30 times, organix chicken and brown rice recipe, ordered 28 times, and small dog biscuits, ordered 26 times. Lastly, the top three most popular product in the packaged vegetables fruits asile is organic baby spinach, ordered 9784 times, organic raspberries, ordered 5546 times, and organic blueberries, ordered 4966 times. 
+
+**Table for the mean hour of the day at which Pink Lady Apples and Coffee Ice Cream are ordered on each day of the week.**
 
 
 ```{r}
@@ -142,10 +134,7 @@ Load the data
 data("brfss_smart2010")
 ```
 
-
-# format the data to use appropriate variable names;
-
-Focusing on the "Overall Health" topic, including response ordered from "Poor" to "Excellent"
+Formatting data with appropriate variable names;focusing on the "Overall Health" topic, including only response ordered from "Poor" to "Excellent"
 
 ```{r}
 brfss_df = 
@@ -156,13 +145,11 @@ brfss_df =
          response %in% c("Excellent","Very good","Good","Fair","Poor")) %>% 
   mutate(
     response = factor(response),
-    response = forcats::fct_relevel(response, c("Poor","Fair","Good","Very good","Excellent")))
+    response = forcats::fct_relevel(response, c("Poor","Fair","Good","Very good","Excellent"))) %>% 
+  arrange(response)
 ```
 
-
-Using this dataset, do or answer the following (commenting on the results of each):
-
-In 2002, which states were observed at 7 or more locations? What about in 2010?
+**In 2002, which states were observed at 7 or more locations? What about in 2010?**
 
 ```{r}
 brfss_df %>% 
@@ -181,7 +168,7 @@ brfss_df %>%
 In 2002, there are 6 states that were observed at 7 or more locations. The names of the states are CT,FL,MA, NC, NJ, and PA. In 2010, there are 14 states that were observed at 7 or more locations. The names of those states are CA, CO, FL, MA, MD, NC, NE, NJ, NY, OH, PA, SC, TX, WA. 
 
 
-Construct a dataset that is limited to Excellent responses, and contains, year, state, and a variable that averages the data_value across locations within a state. 
+**Construct a data set limited to Excellent responses, and contains, year, state, and a variable that averages the data_value across locations within a state.**
 
 ```{r}
 mean_excellent_df = brfss_df %>% 
@@ -192,10 +179,11 @@ mean_excellent_df = brfss_df %>%
   ) %>% 
   select(year, state, mean_data_value) %>% 
   distinct()
+mean_excellent_df
 ```
 
 
-Make a “spaghetti” plot of this average value over time within a state (that is, make a plot showing a line for each state across years – the geom_line geometry and group aesthetic will help).
+**“Spaghetti” plot for average value over time within a state.**
 
 ```{r}
 mean_excellent_df %>% 
@@ -204,7 +192,8 @@ mean_excellent_df %>%
 ```
 
 
-Make a two-panel plot showing, for the years 2006, and 2010, distribution of data_value for responses (“Poor” to “Excellent”) among locations in NY State.
+**Two-panel plot showing, for the years 2006, and 2010, distribution of data_value for responses (“Poor” to “Excellent”) among locations in NY State.**
+
 ```{r}
 brfss_df %>% 
   filter(state == "NY", year == 2006 | year == 2010) %>% 
@@ -217,8 +206,6 @@ brfss_df %>%
 ## Problem 3
 
 Load, tidy, and otherwise wrangle the data
-
-#encode data with reasonable variable classes??
 
 ```{r}
 accel_df = read_csv("data_hw3/accel_data.csv") %>% 
@@ -239,8 +226,8 @@ accel_df = read_csv("data_hw3/accel_data.csv") %>%
 This data set have `r ncol(accel_df)` variables, including the week, day, day_id, minute of the day, day_type, and activity value. The set has `r nrow(accel_df)` observations. Each observation is about the activity counts for a specific minute from a 24-hour day and the information about that day, including the week, day_id, and whether it is a weekday or weekend. 
 
 
-Aggregate accross minutes to create a total activity variable for each day, and create a table showing these totals. 
-# Are any trends apparent?
+**Aggregate across minutes to create a total activity variable for each day, and create a table showing these totals.**
+
 ```{r}
 #accel_df %>% 
 #  group_by(day_id) %>% 
@@ -257,11 +244,9 @@ mutate(
   knitr::kable()
 ```
 
-There's no apparent trends 
+There's no apparent trends. However, day 24 and day 31 only have a total activity of 1440, meaning that activity is 1 per minute on those days. This differs with the rest of the dataset significantly, indicating that the data might have been recorded wrong. 
 
-Accelerometer data allows the inspection activity over the course of the day. Make a single-panel plot that 
-
-shows the 24-hour activity time courses for each day and use color to indicate day of the week. Describe in words any patterns or conclusions you can make based on this graph
+**Single-panel plot for the 24-hour activity time courses for each day**
 
 ```{r}
 total_activity_df = accel_df %>% 
