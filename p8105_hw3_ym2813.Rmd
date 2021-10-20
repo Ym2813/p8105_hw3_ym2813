@@ -239,7 +239,7 @@ accel_df %>%
 mutate(
     total_activity = sum(activity)
   ) %>% 
-  select(day_id, day, day_type, total_activity) %>% 
+  select(week,day_id, day, day_type, total_activity) %>% 
   distinct() %>% 
   knitr::kable()
 ```
