@@ -249,17 +249,26 @@ There's no apparent trends. However, day 24 and day 31 only have a total activit
 **Single-panel plot for the 24-hour activity time courses for each day**
 
 ```{r}
-total_activity_df = accel_df %>% 
-  group_by(day_id) %>% 
-mutate(
-    total_activity = sum(activity)
-  )
-
-total_activity_df %>% 
-  group_by(week) %>% 
-  ggplot(aes(x = day_id, y = total_activity, color = day)) + 
-  geom_point() +
-  geom_line()
+accel_df %>% 
+  ggplot(aes(x = minute_of_day, y = activity, color = day)) + 
+  geom_point(alpha = 0.5)
 ```
 
-From the plot we can see that the total activity time for each day differs significantly from one day to another. Moreover, even for the same day of the week, the activity time courses are very different week from week. This is abnormal, suggesting that there might be some mistake in the original data, especially the recording in Saturday, where the participants had as high as  607175 counts in week two and as low as 1440 in week 4 and 5. Therefore, we might have to go back to the original data and corect the data before further analysis. 
+From the scatter plot we can see that activity for each day are typically low around the 1st to 400 minute of the day. Then activity would start to increase and vary each day. The most amount of activity is done on Sunday around 400 and 700 minute, and on Friday around 1250 minute. To see and interpret the plot more easily, I will convert the minute to the hour of the day and plot a smooth plot. 
+
+```{r}
+accel_df %>% 
+  mutate(
+    hour_of_day = minute_of_day %/% 60,
+  ) %>% 
+  group_by(day_id,hour_of_day) %>% 
+  ggplot(aes(x = hour_of_day, y = activity, color = day)) +
+  scale_x_continuous(
+    breaks = c(0,4,8,12,16,20,24),
+    labels = c("0","4","8","12","16","20","24"),
+    limits = c(0,24)
+  ) +
+  geom_smooth(se = FALSE)
+```
+
+Similar to the founding in the scatter plot above, the smooth plot shows that activity is low from 0am to 8am of the day. After that, activity start to increase. The amount of activity between 8am to 12 am is the most out of all days on Sunday. After 12am, activity stays steady for a few hours. Then there's an increase around 4 pm to 8pm each day. Activity have a peak around 8pm to 9 pm for Friday. Mostly, activity counts start to decrease after 8 pm or 9pm each day and remains decreasing for the rest of the day. 
