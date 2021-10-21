@@ -256,7 +256,7 @@ accel_df %>%
 
 From the scatter plot we can see that activity for each day are typically low around the 1st to 400 minute of the day. Then activity would start to increase and vary each day. The most amount of activity is done on Sunday around 400 and 700 minute, and on Friday around 1250 minute. To see and interpret the plot more easily, I will convert the minute to the hour of the day and plot a smooth plot. 
 
-```{r}
+```{r, message = FALSE}
 accel_df %>% 
   mutate(
     hour_of_day = minute_of_day %/% 60,
